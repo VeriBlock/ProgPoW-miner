@@ -131,11 +131,11 @@ void CUDAMiner::workLoop()
 				current = w;
 			}
 			uint64_t upper64OfBoundary = (uint64_t)(u64)((u256)current.boundary >> 192);
-			uint64_t startN = current.startNonce;
+			uint32_t startN = current.startNonce;
 			if (current.exSizeBits >= 0)
 			{
 				// this can support up to 2^c_log2Max_miners devices
-				startN = current.startNonce | ((uint64_t)index << (64 - LOG2_MAX_MINERS - current.exSizeBits));
+				startN = current.startNonce | ((uint64_t)index << (32 - LOG2_MAX_MINERS - current.exSizeBits));
 			}
 			search(current.header.data(), upper64OfBoundary, (current.exSizeBits >= 0), startN, w);
 		}
@@ -324,7 +324,7 @@ unsigned CUDAMiner::s_blockSize = CUDAMiner::c_defaultBlockSize;
 unsigned CUDAMiner::s_gridSize = CUDAMiner::c_defaultGridSize;
 unsigned CUDAMiner::s_numStreams = CUDAMiner::c_defaultNumStreams;
 unsigned CUDAMiner::s_scheduleFlag = 0;
-bool CUDAMiner::s_noeval = false;
+bool CUDAMiner::s_noeval = true;
 
 bool CUDAMiner::cuda_init(
 	size_t numDevices,

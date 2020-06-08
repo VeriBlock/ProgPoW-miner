@@ -82,7 +82,7 @@ struct WorkPackage
     h256 job;
     int epoch = -1;
 
-    uint64_t startNonce = 0;
+    uint32_t startNonce = 0;
     uint64_t height = 0;
     int exSizeBits = -1;
     int job_len = 8;

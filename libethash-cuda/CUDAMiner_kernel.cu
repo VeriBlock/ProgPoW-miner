@@ -151,7 +151,9 @@ progpow_search(
 {
     __shared__ uint32_t c_dag[PROGPOW_CACHE_WORDS];
     uint32_t const gid = blockIdx.x * blockDim.x + threadIdx.x;
-    uint64_t const nonce = start_nonce + gid;
+	
+	// Forcibly truncate nonce to 32 bytes, rolling over if necessary
+    uint64_t const nonce = (0x00000000FFFFFFFF & (start_nonce)) + gid;
 
     const uint32_t lane_id = threadIdx.x & (PROGPOW_LANES - 1);
 
@@ -208,8 +210,14 @@ progpow_search(
     }
 
     // keccak(header .. keccak(header..nonce) .. digest);
-    if (keccak_f800(header, seed, digest) >= target)
+    uint64_t result = keccak_f800(header, seed, digest);
+	if (result >= target)
         return;
+		
+	printf("Result! %016llx\n", result);
+	printf("Target: %016llx\n", target);
+	printf("Header: %016llx %016llx %016llx %016llx\n", header.uint32s[0], header.uint32s[1], header.uint32s[2], header.uint32s[3]);
+	printf("Start Nonce: %016llx\n", start_nonce);
 
     uint32_t index = atomicInc((uint32_t *)&g_output->count, 0xffffffff);
     if (index >= SEARCH_RESULTS)
