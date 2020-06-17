@@ -742,8 +742,10 @@ public:
 
 		if (m_mode == OperationMode::Benchmark)
 			doBenchmark(m_minerType, m_benchmarkWarmup, m_benchmarkTrial, m_benchmarkTrials);
-		else if (m_mode == OperationMode::Farm || m_mode == OperationMode::Stratum || m_mode == OperationMode::Simulation)
+		else if (m_mode == OperationMode::Farm || m_mode == OperationMode::Stratum || m_mode == OperationMode::Simulation) {
+			
 			doMiner();
+		}
 	}
 
 	static void streamHelp(ostream& _out)
@@ -921,7 +923,6 @@ private:
 #endif
 
 		PoolClient *client = nullptr;
-
 		if (m_mode == OperationMode::Stratum) {
 			client = new EthStratumClient(m_worktimeout, m_email, m_report_stratum_hashrate);
 		}
@@ -935,7 +936,7 @@ private:
 			cwarn << "Invalid OperationMode";
 			exit(1);
 		}
-
+;
 		// Should not happen!
 		if (!client) {
 			cwarn << "Invalid PoolClient";
