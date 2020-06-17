@@ -13,8 +13,8 @@ cable_configure_toolchain(DEFAULT cxx11)
 
 set(HUNTER_CONFIGURATION_TYPES Release)
 HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.20.34.tar.gz"
-    SHA1 "2f04d1beffdf39db1c40d8347beb8c10bbe9b8ed"
+    URL "https://github.com/ruslo/hunter/archive/v0.22.3.tar.gz"
+    SHA1 "46089aabb7c8cc181a70a7a61699f526c116cedf"
     LOCAL
 )
 
