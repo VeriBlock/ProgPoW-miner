@@ -936,7 +936,7 @@ private:
 			cwarn << "Invalid OperationMode";
 			exit(1);
 		}
-;
+
 		// Should not happen!
 		if (!client) {
 			cwarn << "Invalid PoolClient";
