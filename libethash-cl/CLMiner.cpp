@@ -332,7 +332,7 @@ void CLMiner::workLoop()
 				if (w.exSizeBits >= 0)
 				{
 					// This can support up to 2^c_log2MaxMiners devices.
-					startNonce = w.startNonce | ((uint64_t)index << (32 - LOG2_MAX_MINERS - w.exSizeBits));
+					startNonce = w.startNonce | ((uint32_t)index << (32 - LOG2_MAX_MINERS - w.exSizeBits));
 				}
 				else
 					startNonce = get_start_nonce();

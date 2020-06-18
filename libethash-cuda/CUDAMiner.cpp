@@ -135,7 +135,7 @@ void CUDAMiner::workLoop()
 			if (current.exSizeBits >= 0)
 			{
 				// this can support up to 2^c_log2Max_miners devices
-				startN = current.startNonce | ((uint64_t)index << (32 - LOG2_MAX_MINERS - current.exSizeBits));
+				startN = current.startNonce | ((uint32_t)index << (32 - LOG2_MAX_MINERS - current.exSizeBits));
 			}
 			search(current.header.data(), upper64OfBoundary, (current.exSizeBits >= 0), startN, w);
 		}
