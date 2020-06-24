@@ -178,7 +178,7 @@ return NULL;
 #if ETH_ETHASHCL
 	//Get and count OpenCL devices.
 	std::vector<cl::Platform> platforms;
-	// cl::Platform::get(&platforms);
+	cl::Platform::get(&platforms);
 	std::vector<cl::Device> platdevs;
 	for(unsigned p = 0; p<platforms.size(); p++){
 		std::string platformName = platforms[p].getInfo<CL_PLATFORM_NAME>();

@@ -347,6 +347,7 @@ void CLMiner::workLoop()
 			uint32_t results[c_maxSearchResults + 1];
 			m_queue.enqueueReadBuffer(m_searchBuffer, CL_TRUE, 0, sizeof(results), &results);
 
+
 			uint64_t nonce = 0;
 			if (results[0] > 0)
 			{
@@ -363,13 +364,8 @@ void CLMiner::workLoop()
 			// Report results while the kernel is running.
 			// It takes some time because ethash must be re-evaluated on CPU.
 			if (nonce != 0) {
-				Result r = EthashAux::eval(current.epoch, current.header, nonce);
-				if (r.value < current.boundary)
+					Result r = EthashAux::eval(current.epoch, current.header, nonce);
 					farm.submitProof(Solution{nonce, r.mixHash, current, current.header != w.header});
-				else {
-					farm.failedSolution();
-					cwarn << "FAILURE: GPU gave incorrect result!";
-				}
 			}
 
 			old_period_seed = period_seed;

@@ -227,7 +227,7 @@ __kernel void ethash_search(
     if (keccak_f800(g_header, seed, digest) < target)
     {
         uint slot = atomic_inc(&g_output[0]) + 1;
-        if(slot < MAX_OUTPUTS)
+        if(slot <= MAX_OUTPUTS)
             g_output[slot] = gid;
     }
 }
