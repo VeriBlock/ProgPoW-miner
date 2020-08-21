@@ -170,6 +170,9 @@ progpow_search(
         digest.uint32s[i] = 0;
     // keccak(header..nonce)
     uint64_t seed = keccak_f800(header, nonce, digest);
+	seed = keccak_f800(digest, seed, digest); // Additional Keccak_f800 round for seed
+	
+	seed = seed & 0x3FFFFFFFFFFFFFFF;
 
     __syncthreads();
 

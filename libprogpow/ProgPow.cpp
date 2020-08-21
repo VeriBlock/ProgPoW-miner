@@ -201,10 +201,10 @@ std::string ProgPow::merge(std::string a, std::string b, uint32_t r)
 {
 	switch (r % 4)
 	{
-	case 0: return a + " = (" + a + " * 33) + " + b + ";\n";
-	case 1: return a + " = (" + a + " ^ " + b + ") * 33;\n";
-	case 2: return a + " = ROTL32(" + a + ", " + std::to_string(((r >> 16) % 31) + 1) + ") ^ " + b + ";\n";
-	case 3: return a + " = ROTR32(" + a + ", " + std::to_string(((r >> 16) % 31) + 1) + ") ^ " + b + ";\n";
+	case 0: return a + " = ROTR32(" + a + ", " + std::to_string(((r >> 16) % 31) + 1) + ") ^ " + b + ";\n";
+	case 1: return a + " = ROTL32(" + a + ", " + std::to_string(((r >> 16) % 31) + 1) + ") ^ " + b + ";\n";
+	case 2: return a + " = (" + a + " ^ " + b + ") * 33;\n";
+	case 3: return a + " = (" + a + " * 33) + " + b + ";\n";
 	}
     return "#error\n";
 }
@@ -214,17 +214,17 @@ std::string ProgPow::math(std::string d, std::string a, std::string b, uint32_t 
 {
 	switch (r % 11)
 	{
-	case 0: return d + " = " + a + " + " + b + ";\n";
-	case 1: return d + " = " + a + " * " + b + ";\n";
-	case 2: return d + " = mul_hi(" + a + ", " + b + ");\n";
-	case 3: return d + " = min(" + a + ", " + b + ");\n";
-	case 4: return d + " = ROTL32(" + a + ", " + b + ");\n";
+	case 0: return d + " = ROTL32(" + a + ", " + b + ");\n"; 
+	case 1: return d + " = " + a + " & " + b + ";\n"; 
+	case 2: return d + " = " + a + " + " + b + ";\n";
+	case 3: return d + " = popcount(" + a + ") + popcount(" + b + ");\n"; 
+	case 4: return d + " = clz(" + a + ") + clz(" + b + ");\n";
 	case 5: return d + " = ROTR32(" + a + ", " + b + ");\n";
-	case 6: return d + " = " + a + " & " + b + ";\n";
+	case 6: return d + " = mul_hi(" + a + ", " + b + ");\n"; 
 	case 7: return d + " = " + a + " | " + b + ";\n";
-	case 8: return d + " = " + a + " ^ " + b + ";\n";
-	case 9: return d + " = clz(" + a + ") + clz(" + b + ");\n";
-	case 10: return d + " = popcount(" + a + ") + popcount(" + b + ");\n";
+	case 8: return d + " = " + a + " * " + b + ";\n";
+	case 9: return d + " = " + a + " ^ " + b + ";\n";
+	case 10: return d + " = min(" + a + ", " + b + ");\n";
 	}
     return "#error\n";
 }
