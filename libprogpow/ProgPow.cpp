@@ -203,8 +203,8 @@ std::string ProgPow::merge(std::string a, std::string b, uint32_t r)
 	{
 	case 0: return a + " = ROTR32(" + a + ", " + std::to_string(((r >> 16) % 31) + 1) + ") ^ " + b + ";\n";
 	case 1: return a + " = ROTL32(" + a + ", " + std::to_string(((r >> 16) % 31) + 1) + ") ^ " + b + ";\n";
-	case 2: return a + " = (" + a + " ^ " + b + ") * 33;\n";
-	case 3: return a + " = (" + a + " * 33) + " + b + ";\n";
+	case 2: return a + " = (" + a + " * 33) + " + b + ";\n";
+	case 3: return a + " = (" + a + " ^ " + b + ") * 33;\n";
 	}
     return "#error\n";
 }

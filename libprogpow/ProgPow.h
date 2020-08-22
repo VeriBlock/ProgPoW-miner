@@ -18,7 +18,7 @@
 // random cache accesses per loop
 #define PROGPOW_CNT_CACHE       11
 // random math instructions per loop
-#define PROGPOW_CNT_MATH        28
+#define PROGPOW_CNT_MATH        18
 
 class ProgPow
 {

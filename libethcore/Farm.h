@@ -66,7 +66,7 @@ public:
 		m_nonce_scrambler = uniform_int_distribution<uint64_t>()(engine);
 
 		// Init HWMON
-		adlh = wrap_adl_create();
+		// adlh = wrap_adl_create();
 #if defined(__linux)
 		sysfsh = wrap_amdsysfs_create();
 #endif

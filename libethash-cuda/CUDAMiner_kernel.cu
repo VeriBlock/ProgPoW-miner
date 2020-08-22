@@ -169,11 +169,11 @@ progpow_search(
     for (int i = 0; i < 8; i++)
         digest.uint32s[i] = 0;
     // keccak(header..nonce)
-    uint64_t seed = keccak_f800(header, nonce, digest);
-	seed = keccak_f800(digest, seed, digest); // Additional Keccak_f800 round for seed
+    uint64_t seedIntermediate = keccak_f800(header, nonce, digest);
 	
+	uint64_t seed = keccak_f800(digest, seedIntermediate, digest); // Additional Keccak_f800 round for seed
 	seed = seed & 0x3FFFFFFFFFFFFFFF;
-
+	
     __syncthreads();
 
     #pragma unroll 1
@@ -218,6 +218,8 @@ progpow_search(
         return;
 		
 	printf("Result! %016llx\n", result);
+	printf("seedIntermediate: %016llx\n", seedIntermediate);
+	printf("seed: %016llx\n", seed);
 	printf("Target: %016llx\n", target);
 	printf("Header: %016llx %016llx %016llx %016llx\n", header.uint32s[0], header.uint32s[1], header.uint32s[2], header.uint32s[3]);
 	printf("Start Nonce: %016llx\n", start_nonce);
