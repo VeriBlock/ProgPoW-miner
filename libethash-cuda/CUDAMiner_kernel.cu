@@ -218,8 +218,6 @@ progpow_search(
         return;
 		
 	printf("Result! %016llx\n", result);
-	printf("seedIntermediate: %016llx\n", seedIntermediate);
-	printf("seed: %016llx\n", seed);
 	printf("Target: %016llx\n", target);
 	printf("Header: %016llx %016llx %016llx %016llx\n", header.uint32s[0], header.uint32s[1], header.uint32s[2], header.uint32s[3]);
 	printf("Start Nonce: %016llx\n", start_nonce);
