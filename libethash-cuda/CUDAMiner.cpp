@@ -59,6 +59,7 @@ CUDAMiner::~CUDAMiner()
 
 bool CUDAMiner::init(int epoch)
 {
+	cout << "Epoch " << epoch << endl;
 	try {
 		if (s_dagLoadMode == DAG_LOAD_MODE_SEQUENTIAL)
 			while (s_dagLoadIndex < index)

@@ -37,7 +37,6 @@ else()
 		"-gencode arch=compute_61,code=sm_61"
 		"-gencode arch=compute_70,code=sm_70"
 		"-gencode arch=compute_75,code=sm_75"
-		"-gencode arch=compute_80,code=sm_80"
 	)
 endif()
 
