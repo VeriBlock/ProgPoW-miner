@@ -187,7 +187,7 @@ progpow_search(
 	seed = keccak_f800(digest, seed, digest);
 	seed = keccak_f800(digest, seed, digest);
 	
-	seed = seed & 0x3FFFFFFFFFFFFFFF;
+	seed = seed & 0x007FFFFFFFFFFFFF;
 	
     __syncthreads();
 
