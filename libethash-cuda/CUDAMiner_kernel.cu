@@ -168,10 +168,25 @@ progpow_search(
     hash32_t digest;
     for (int i = 0; i < 8; i++)
         digest.uint32s[i] = 0;
-    // keccak(header..nonce)
-    uint64_t seedIntermediate = keccak_f800(header, nonce, digest);
+    
+	// keccak(header..nonce)
+    uint64_t seed = keccak_f800(header, nonce, digest);
 	
-	uint64_t seed = keccak_f800(digest, seedIntermediate, digest); // Additional Keccak_f800 round for seed
+	// 13 additional Keccak_f800 rounds for seed
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	
 	seed = seed & 0x3FFFFFFFFFFFFFFF;
 	
     __syncthreads();

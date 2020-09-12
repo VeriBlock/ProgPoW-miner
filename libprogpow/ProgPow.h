@@ -14,11 +14,11 @@
 // size of the cached portion of the DAG
 #define PROGPOW_CACHE_BYTES     (16*1024)
 // DAG accesses, also the number of loops executed
-#define PROGPOW_CNT_DAG         64
+#define PROGPOW_CNT_DAG         128
 // random cache accesses per loop
 #define PROGPOW_CNT_CACHE       11
 // random math instructions per loop
-#define PROGPOW_CNT_MATH        18
+#define PROGPOW_CNT_MATH        20
 
 class ProgPow
 {
