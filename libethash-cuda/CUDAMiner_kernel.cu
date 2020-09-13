@@ -42,15 +42,21 @@ __device__ __forceinline__ void keccak_f800_round(uint32_t st[25], const int r)
 
     uint32_t t, bc[5];
     // Theta
-    for (int i = 0; i < 5; i++)
-        bc[i] = st[i] ^ st[i + 5] ^ st[i + 10] ^ st[i + 15] ^ st[i + 20];
+    // for (int i = 0; i < 5; i++)
+    //     bc[i] = st[i] ^ st[i + 5] ^ st[i + 10] ^ st[i + 15] ^ st[i + 20];
+	
+	bc[0] = st[0] ^ st[6] ^ st[9] ^ st[12] ^ st[17];
+	bc[1] = st[8] ^ st[11] ^ st[14] ^ st[19] ^ st[23];
+	bc[2] = st[2] ^ st[7] ^ st[10] ^ st[18] ^ st[22];
+	bc[3] = st[4] ^ st[5] ^ st[15] ^ st[20] ^ st[24];
+	bc[4] = st[1] ^ st[3] ^ st[13] ^ st[16] ^ st[21];
 
     for (int i = 0; i < 5; i++) {
         t = bc[(i + 4) % 5] ^ ROTL32(bc[(i + 1) % 5], 1);
         for (uint32_t j = 0; j < 25; j += 5)
             st[j + i] ^= t;
     }
-
+	
     // Rho Pi
     t = st[1];
     for (int i = 0; i < 24; i++) {
@@ -59,6 +65,10 @@ __device__ __forceinline__ void keccak_f800_round(uint32_t st[25], const int r)
         st[j] = ROTL32(t, keccakf_rotc[i]);
         t = bc[0];
     }
+	
+	st[3] = st[3] ^ 0x79938B61;
+	st[10] = st[10] ^ (st[19] & 0x000000FF | st[24] & 0x0000FF00 | st[6] & 0x00FF0000 | st[14] & 0xFF000000);
+	
 
     //  Chi
     for (uint32_t j = 0; j < 25; j += 5) {
