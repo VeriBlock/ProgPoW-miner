@@ -162,8 +162,8 @@ progpow_search(
     __shared__ uint32_t c_dag[PROGPOW_CACHE_WORDS];
     uint32_t const gid = blockIdx.x * blockDim.x + threadIdx.x;
 	
-	// Forcibly truncate nonce to 32 bytes, rolling over if necessary
-    uint64_t const nonce = (0x00000000FFFFFFFF & (start_nonce)) + gid;
+	// Forcibly truncate nonce to 40 bytes, rolling over if necessary
+    uint64_t const nonce = (0x000000FFFFFFFFFF & (start_nonce)) + gid;
 
     const uint32_t lane_id = threadIdx.x & (PROGPOW_LANES - 1);
 
