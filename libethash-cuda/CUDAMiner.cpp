@@ -108,7 +108,7 @@ void CUDAMiner::workLoop()
 		{
 	                // take local copy of work since it may end up being overwritten.
 			const WorkPackage w = work();
-			uint64_t period_seed = (w.height + 2656000) / PROGPOW_PERIOD;
+			uint64_t period_seed = (w.height + 2584000) / PROGPOW_PERIOD;
 
 			if (current.header != w.header || current.epoch != w.epoch || old_period_seed != period_seed)
 			{
@@ -123,9 +123,9 @@ void CUDAMiner::workLoop()
 						break;
 				if (old_period_seed != period_seed)
 				{
-					uint64_t dagBytes = ethash_get_datasize(w.height + 2656000);
+					uint64_t dagBytes = ethash_get_datasize(w.height + 2584000);
 					uint32_t dagElms   = (unsigned)(dagBytes / (PROGPOW_LANES * PROGPOW_DAG_LOADS * 4));
-					compileKernel(w.height + 2656000, dagElms);
+					compileKernel(w.height + 2584000, dagElms);
 				}
 				old_period_seed = period_seed;
 				current = w;
