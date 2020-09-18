@@ -215,6 +215,7 @@ public:
 	uint64_t get_start_nonce()
 	{
 		// Each GPU is given a non-overlapping 2^40 range to search
+		printf("Start nonce with index %d\n", index);
 		return farm.get_nonce_scrambler() + ((uint64_t) index << 40);
 	}
 

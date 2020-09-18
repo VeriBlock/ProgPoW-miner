@@ -602,10 +602,19 @@ void CUDAMiner::search(
 		}
 	}
 	const uint32_t batch_size = s_gridSize * s_blockSize;
+	const uint32_t max_nonce = 0xEFFFFFFFF;
 	while (true)
 	{
 		m_current_index++;
 		m_current_nonce += batch_size;
+		
+		if ((m_current_nonce & 0x0000000FFFFFFFFF) > max_nonce) {
+			m_current_nonce = 0;
+		}
+		
+		m_current_nonce = m_current_nonce & 0xFFFFFF0FFFFFFFFF; // zero out bits 37-40
+		m_current_nonce = m_current_nonce | (((uint64_t)(m_device_num & 0x0F)) << 36); // Use device number to create unique nonce range
+		
 		auto stream_index = m_current_index % s_numStreams;
 		cudaStream_t stream = m_streams[stream_index];
 		volatile search_results* buffer = m_search_buf[stream_index];
