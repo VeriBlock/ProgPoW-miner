@@ -47,8 +47,14 @@ void keccak_f800_round(uint32_t st[25], const int r)
 
     uint32_t t, bc[5];
     // Theta
-    for (int i = 0; i < 5; i++)
-        bc[i] = st[i] ^ st[i + 5] ^ st[i + 10] ^ st[i + 15] ^ st[i + 20];
+    // for (int i = 0; i < 5; i++)
+    //     bc[i] = st[i] ^ st[i + 5] ^ st[i + 10] ^ st[i + 15] ^ st[i + 20];
+	
+	bc[0] = st[0] ^ st[6] ^ st[9] ^ st[12] ^ st[17];
+	bc[1] = st[8] ^ st[11] ^ st[14] ^ st[19] ^ st[23];
+	bc[2] = st[2] ^ st[7] ^ st[10] ^ st[18] ^ st[22];
+	bc[3] = st[4] ^ st[5] ^ st[15] ^ st[20] ^ st[24];
+	bc[4] = st[1] ^ st[3] ^ st[13] ^ st[16] ^ st[21];
 
     for (int i = 0; i < 5; i++) {
         t = bc[(i + 4) % 5] ^ ROTL32(bc[(i + 1) % 5], 1u);
@@ -64,6 +70,9 @@ void keccak_f800_round(uint32_t st[25], const int r)
         st[j] = ROTL32(t, keccakf_rotc[i]);
         t = bc[0];
     }
+	
+	st[3] = st[3] ^ 0x79938B61;
+	st[10] = st[10] ^ ((st[19] & 0x000000FF) | (st[24] & 0x0000FF00) | (st[6] & 0x00FF0000) | (st[14] & 0xFF000000));
 
     //  Chi
     for (uint32_t j = 0; j < 25; j += 5) {
@@ -80,14 +89,14 @@ void keccak_f800_round(uint32_t st[25], const int r)
 // Keccak - implemented as a variant of SHAKE
 // The width is 800, with a bitrate of 576, a capacity of 224, and no padding
 // Only need 64 bits of output for mining
-uint64_t keccak_f800(__constant hash32_t const* g_header, uint64_t seed, hash32_t digest)
+uint64_t keccak_f800(hash32_t g_header, uint64_t seed, hash32_t digest)
 {
     uint32_t st[25];
 
     for (int i = 0; i < 25; i++)
         st[i] = 0;
     for (int i = 0; i < 8; i++)
-        st[i] = g_header->uint32s[i];
+        st[i] = g_header.uint32s[i];
     st[8] = seed;
     st[9] = seed >> 32;
     for (int i = 0; i < 8; i++)
@@ -178,8 +187,29 @@ __kernel void ethash_search(
     hash32_t digest;
     for (int i = 0; i < 8; i++)
         digest.uint32s[i] = 0;
+		
+	hash32_t header_copy;
+	for (int i = 0; i < 8; i++) {
+		header_copy.uint32s[i] = g_header->uint32s[i];
+	}
+		
     // keccak(header..nonce)
-    uint64_t seed = keccak_f800(g_header, start_nonce + gid, digest);
+    uint64_t seed = keccak_f800(header_copy, start_nonce + gid, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	seed = keccak_f800(digest, seed, digest);
+	
+	seed = seed & 0x007FFFFFFFFFFFFF;
 
     barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -224,7 +254,7 @@ __kernel void ethash_search(
     }
 
     // keccak(header .. keccak(header..nonce) .. digest);
-    if (keccak_f800(g_header, seed, digest) < target)
+    if (keccak_f800(header_copy, seed, digest) < target)
     {
         uint slot = atomic_inc(&g_output[0]) + 1;
         if(slot <= MAX_OUTPUTS)

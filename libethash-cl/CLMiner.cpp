@@ -290,7 +290,7 @@ void CLMiner::workLoop()
 		while (!shouldStop())
 		{
 			const WorkPackage w = work();
-			uint64_t period_seed = w.height / PROGPOW_PERIOD;
+			uint64_t period_seed = (w.height + 2584000) / PROGPOW_PERIOD;
 
 			if (current.header != w.header || current.epoch != w.epoch || old_period_seed != period_seed)
 			{
@@ -314,7 +314,7 @@ void CLMiner::workLoop()
 					}
 
 					cllog << "New epoch " << w.epoch << "/ period " << period_seed;
-					init(w.epoch, w.height, current.epoch != w.epoch, old_period_seed != period_seed);
+					init(w.epoch, (w.height + 2584000), current.epoch != w.epoch, old_period_seed != period_seed);
 				}
 
 				// Upper 64 bits of the boundary.
@@ -469,7 +469,7 @@ bool CLMiner::configureGPU(
 	s_workgroupSize = _localWorkSize;
 	s_initialGlobalWorkSize = _globalWorkSizeMultiplier * _localWorkSize;
 
-	uint64_t dagSize = ethash_get_datasize(_currentBlock);
+	uint64_t dagSize = ethash_get_datasize(_currentBlock + 2584000);
 
 	vector<cl::Platform> platforms = getPlatforms();
 	if (platforms.empty())
